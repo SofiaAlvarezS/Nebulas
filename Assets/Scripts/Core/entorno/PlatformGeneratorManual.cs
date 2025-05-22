@@ -22,7 +22,7 @@ public class PlatformGeneratorManual : MonoBehaviour
     public GameObject[] platformPrefabs; // 3 prefabs (normal, hielo, arena)
     public float spawnInterval = 1f;
     public float minY = -1.4f, maxY = 7f;
-    public float startX = 15f;  // aparece a la derecha
+    public float startX = 0f;  // aparece a la derecha
 
     private float timer;
     private List<PlatformData> activePlatforms = new List<PlatformData>();
@@ -44,7 +44,7 @@ public class PlatformGeneratorManual : MonoBehaviour
             if (data.enemy != null)
                 data.enemy.transform.position += Vector3.left * data.speed * Time.deltaTime;
 
-            if (data.platform.transform.position.x <= -20f) // offscreen left
+            if (data.platform.transform.position.x <= -51f) // offscreen left
             {
                 if (data.enemy != null)
                     Destroy(data.enemy);
