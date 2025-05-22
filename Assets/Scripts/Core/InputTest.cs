@@ -4,15 +4,23 @@ public class InputTest : MonoBehaviour
 {
     private void OnEnable()
     {
-        InputService.OnMove += dir => Debug.Log($"[Test] Move: {dir}");
-        InputService.OnJumpPressed += () => Debug.Log("[Test] Jump Pressed");
-        InputService.OnJumpReleased += () => Debug.Log("[Test] Jump Released");
+        InputService.OnMove += HandleMove;
+        InputService.OnJumpPressed += HandleJump;
     }
 
     private void OnDisable()
     {
-        InputService.OnMove -= dir => Debug.Log($"[Test] Move: {dir}");
-        InputService.OnJumpPressed -= () => Debug.Log("[Test] Jump Pressed");
-        InputService.OnJumpReleased -= () => Debug.Log("[Test] Jump Released");
+        InputService.OnMove -= HandleMove;
+        InputService.OnJumpPressed -= HandleJump;
+    }
+
+    private void HandleMove(float dir)
+    {
+        Debug.Log($"[Test] Move: {dir}");
+    }
+
+    private void HandleJump()
+    {
+        Debug.Log("[Test] Jump pressed");
     }
 }
