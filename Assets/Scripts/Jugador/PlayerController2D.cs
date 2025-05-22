@@ -24,7 +24,7 @@ public class PlayerController2D : MonoBehaviour
     private bool isGrounded, jumpQueued;
     private Animator animator;
     private SpriteRenderer sprite;
-    private List<Rect> groundRects;
+    private List<Rect> groundRects = new List<Rect>();
 
     private void Awake()
     {
@@ -39,32 +39,24 @@ public class PlayerController2D : MonoBehaviour
             animator.runtimeAnimatorController = animatorController;
 
         sprite = GetComponent<SpriteRenderer>();
-
-        // Carga plataformas tagged "Ground"
-        groundRects = new List<Rect>();
-        try
-        {
-            foreach (var floor in GameObject.FindGameObjectsWithTag("Ground"))
-            {
-                var sr = floor.GetComponent<SpriteRenderer>();
-                if (sr != null)
-                {
-                    var b = sr.bounds;
-                    groundRects.Add(new Rect(b.min.x, b.min.y, b.size.x, b.size.y));
-                }
-            }
-        }
-        catch
-        {
-            Debug.LogWarning("Tag 'Ground' no definida. Crea la Tag y aplícala al suelo.");
-        }
-
-        Debug.Log($"[PlayerController2D] Plataformas detectadas: {groundRects.Count}");
     }
 
     private void Update()
     {
         float dt = Time.deltaTime;
+
+        // Actualizar lista de plataformas dinámicamente
+        groundRects.Clear();
+        GameObject[] floors = GameObject.FindGameObjectsWithTag("Ground");
+        foreach (var floor in floors)
+        {
+            var sr = floor.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                var b = sr.bounds;
+                groundRects.Add(new Rect(b.min.x, b.min.y, b.size.x, b.size.y));
+            }
+        }
 
         // Lectura de input
         float moveInput = 0f;
@@ -113,8 +105,6 @@ public class PlayerController2D : MonoBehaviour
         {
             animator.SetFloat("Speed", Mathf.Abs(moveInput));
             animator.SetBool("IsGrounded", isGrounded);
-
-            // Nuevo: Idle cuando no hay movimiento horizontal ni salto
             bool isIdle = (moveInput == 0f) && isGrounded && !jumpQueued;
             animator.SetBool("IsIdle", isIdle);
         }
@@ -132,9 +122,7 @@ public class PlayerController2D : MonoBehaviour
     /// </summary>
     public void Bounce(Vector2 sourcePosition)
     {
-        // Dirección horizontal inversa al golpe
         float dir = (x - sourcePosition.x) >= 0f ? 1f : -1f;
-        // Rebote vertical e impulso lateral
         vy = bouncePower;
         x += dir * bouncePower * Time.deltaTime;
     }
