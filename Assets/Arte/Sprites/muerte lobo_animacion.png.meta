@@ -422,7 +422,19 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      muerte lobo_animacion_0: -2694380924391833079
+      muerte lobo_animacion_1: 6269754288202170655
+      muerte lobo_animacion_10: -1053981733300037534
+      muerte lobo_animacion_11: 673570893016588854
+      muerte lobo_animacion_2: -4168972326973097031
+      muerte lobo_animacion_3: 6035403185289680486
+      muerte lobo_animacion_4: 5763114220205395518
+      muerte lobo_animacion_5: 213376742553713755
+      muerte lobo_animacion_6: -6890974726727871558
+      muerte lobo_animacion_7: -5360863028302700307
+      muerte lobo_animacion_8: -2384138310765168712
+      muerte lobo_animacion_9: 5236900094924486776
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
