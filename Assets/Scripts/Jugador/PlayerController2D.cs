@@ -6,67 +6,73 @@ public class PlayerController2D : MonoBehaviour
     [Header("Movimiento")]
     public float moveSpeed = 5f;
     public float jumpImpulse = 8f;
-    public float g = 20f;
-    public float c1 = 2f;
-    public float m = 1f;
 
-    [Header("Colisión Manual")]
+    [Header("Física Manual")]
+    public float g = 20f;               // gravedad
+    public float c1 = 2f;                // coeficiente aerodinámico
+    public float m = 1f;                // masa
     public Vector2 halfSize = new Vector2(0.4f, 0.5f);
 
-    private float x;
-    private float y;
-    private float vy;
-    private float moveInput;
-    private bool jumpQueued;
-    private bool isGrounded;
+    [Header("Animaciones")]
+    public RuntimeAnimatorController animatorController;
 
+    [Header("Rebote y Control")]
+    public bool canMove = true;                   // controla si el jugador responde al input
+    public float bouncePower = 5f;                // fuerza del rebote tras daño
+
+    private float x, y, vy;
+    private bool isGrounded, jumpQueued;
     private Animator animator;
     private SpriteRenderer sprite;
-
-    // Lista de plataformas (hardcode o cargar dinámicamente)
-    private static readonly List<Rect> groundRects = new List<Rect>
-    {
-        new Rect(-10f, -1f, 20f, 1f),
-        new Rect(  5f,  2f,  3f, 1f),
-        // añade tus plataformas...
-    };
+    private List<Rect> groundRects;
 
     private void Awake()
     {
+        // Inicializa posición y velocidad
         x = transform.position.x;
         y = transform.position.y;
         vy = 0f;
 
+        // Obtiene componentes
         animator = GetComponent<Animator>();
+        if (animatorController != null)
+            animator.runtimeAnimatorController = animatorController;
+
         sprite = GetComponent<SpriteRenderer>();
-    }
 
-    private void OnEnable()
-    {
-        InputService.OnMove += HandleMove;
-        InputService.OnJumpPressed += HandleJump;
-    }
+        // Carga plataformas tagged "Ground"
+        groundRects = new List<Rect>();
+        try
+        {
+            foreach (var floor in GameObject.FindGameObjectsWithTag("Ground"))
+            {
+                var sr = floor.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    var b = sr.bounds;
+                    groundRects.Add(new Rect(b.min.x, b.min.y, b.size.x, b.size.y));
+                }
+            }
+        }
+        catch
+        {
+            Debug.LogWarning("Tag 'Ground' no definida. Crea la Tag y aplícala al suelo.");
+        }
 
-    private void OnDisable()
-    {
-        InputService.OnMove -= HandleMove;
-        InputService.OnJumpPressed -= HandleJump;
-    }
-
-    private void HandleMove(float dir)
-    {
-        moveInput = dir;
-    }
-
-    private void HandleJump()
-    {
-        if (isGrounded)
-            jumpQueued = true;
+        Debug.Log($"[PlayerController2D] Plataformas detectadas: {groundRects.Count}");
     }
 
     private void Update()
     {
         float dt = Time.deltaTime;
+
+        // Lectura de input
+        float moveInput = 0f;
+        if (canMove)
+            moveInput = Input.GetAxisRaw("Horizontal");  // -1, 0, +1
+
+        if (Input.GetButtonDown("Jump") && isGrounded && canMove)
+            jumpQueued = true;
 
         // 1) Movimiento horizontal
         x += moveInput * moveSpeed * dt;
@@ -75,19 +81,14 @@ public class PlayerController2D : MonoBehaviour
         vy += (-g - (c1 / m) * vy) * dt;
         y += vy * dt;
 
-        // 3) Detección de colisiones AABB con plataformas
+        // 3) Detección de suelo (AABB)
         isGrounded = false;
         Vector2 pMin = new Vector2(x - halfSize.x, y - halfSize.y);
         Vector2 pMax = new Vector2(x + halfSize.x, y + halfSize.y);
-
         foreach (var plat in groundRects)
         {
-            Vector2 oMin = new Vector2(plat.xMin, plat.yMin);
-            Vector2 oMax = new Vector2(plat.xMax, plat.yMax);
-
-            bool overlapX = pMax.x > oMin.x && pMin.x < oMax.x;
-            bool overlapY = pMin.y < oMax.y && pMin.y > oMin.y;
-
+            bool overlapX = pMax.x > plat.xMin && pMin.x < plat.xMax;
+            bool overlapY = pMin.y < plat.yMax && pMin.y > plat.yMin;
             if (overlapX && overlapY && vy <= 0f)
             {
                 y = plat.yMax + halfSize.y;
@@ -97,7 +98,7 @@ public class PlayerController2D : MonoBehaviour
             }
         }
 
-        // 4) Salto pendiente
+        // 4) Salto
         if (jumpQueued && isGrounded)
         {
             vy = jumpImpulse;
@@ -108,11 +109,29 @@ public class PlayerController2D : MonoBehaviour
         transform.position = new Vector3(x, y, transform.position.z);
 
         // 6) Animaciones
-        animator.SetFloat("Speed", Mathf.Abs(moveInput));
-        animator.SetBool("IsGrounded", isGrounded);
+        if (animator != null)
+        {
+            animator.SetFloat("Speed", Mathf.Abs(moveInput));
+            animator.SetBool("IsGrounded", isGrounded);
+        }
 
         // 7) Flip horizontal
-        if (moveInput > 0) sprite.flipX = false;
-        else if (moveInput < 0) sprite.flipX = true;
+        if (sprite != null)
+        {
+            if (moveInput > 0f) sprite.flipX = false;
+            else if (moveInput < 0f) sprite.flipX = true;
+        }
+    }
+
+    /// <summary>
+    /// Rebota al jugador al recibir daño desde una posición de origen.
+    /// </summary>
+    public void Bounce(Vector2 sourcePosition)
+    {
+        // Dirección horizontal inversa al golpe
+        float dir = (x - sourcePosition.x) >= 0f ? 1f : -1f;
+        // Rebote vertical e impulso lateral
+        vy = bouncePower;
+        x += dir * bouncePower * Time.deltaTime;
     }
 }
