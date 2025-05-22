@@ -94,7 +94,11 @@ MonoBehaviour:
     x: 0
     y: 0
     width: 390
+<<<<<<< Updated upstream
     height: 668
+=======
+    height: 668
+>>>>>>> Stashed changes
   m_MinSize: {x: 201, y: 226}
   m_MaxSize: {x: 4001, y: 4026}
   m_ActualView: {fileID: 14}
@@ -118,9 +122,15 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
+<<<<<<< Updated upstream
     y: 668
     width: 1622
     height: 265
+=======
+    y: 668
+    width: 1622
+    height: 265
+>>>>>>> Stashed changes
   m_MinSize: {x: 101, y: 126}
   m_MaxSize: {x: 4001, y: 4026}
   m_ActualView: {fileID: 17}
@@ -246,7 +256,11 @@ MonoBehaviour:
     x: 0
     y: 0
     width: 1622
+<<<<<<< Updated upstream
     height: 668
+=======
+    height: 668
+>>>>>>> Stashed changes
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
@@ -270,7 +284,11 @@ MonoBehaviour:
     x: 390
     y: 0
     width: 1232
+<<<<<<< Updated upstream
     height: 668
+=======
+    height: 668
+>>>>>>> Stashed changes
   m_MinSize: {x: 202, y: 226}
   m_MaxSize: {x: 4002, y: 4026}
   m_ActualView: {fileID: 15}
@@ -505,7 +523,11 @@ MonoBehaviour:
     x: 0
     y: 24
     width: 389
+<<<<<<< Updated upstream
     height: 642
+=======
+    height: 642
+>>>>>>> Stashed changes
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -571,7 +593,11 @@ MonoBehaviour:
     x: 391
     y: 24
     width: 1230
+<<<<<<< Updated upstream
     height: 642
+=======
+    height: 642
+>>>>>>> Stashed changes
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -1323,9 +1349,15 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
+<<<<<<< Updated upstream
     y: 692
     width: 1621
     height: 239
+=======
+    y: 693
+    width: 1621
+    height: 239
+>>>>>>> Stashed changes
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
