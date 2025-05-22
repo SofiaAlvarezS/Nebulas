@@ -70,7 +70,7 @@ public class PlayerController2D : MonoBehaviour
         if (moveInput == 0f && isGrounded && !jumpQueued)
         {
             // Simular que el personaje es arrastrado hacia la izquierda
-            x -= 1.5f * Time.deltaTime; // Puedes ajustar esta velocidad
+            x -= 5f * Time.deltaTime; // Puedes ajustar esta velocidad
         }
 
         // 1) Movimiento horizontal

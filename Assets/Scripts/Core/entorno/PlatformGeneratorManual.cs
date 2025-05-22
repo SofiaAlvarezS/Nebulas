@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 
 public class PlatformGeneratorManual : MonoBehaviour
@@ -8,16 +8,19 @@ public class PlatformGeneratorManual : MonoBehaviour
     {
         public GameObject platform;
         public float speed;
+        public GameObject enemy; // Nuevo: referencia al enemigo (puede ser null)
 
-        public PlatformData(GameObject platform, float speed)
+        public PlatformData(GameObject platform, float speed, GameObject enemy = null)
         {
             this.platform = platform;
             this.speed = speed;
+            this.enemy = enemy;
         }
     }
 
-    public GameObject[] platformPrefabs; // Asigna aqu� los 3 prefabs
-    public float spawnInterval = 2f;
+    public GameObject wolfPrefab;
+    public GameObject[] platformPrefabs; // Asigna aquí los 3 prefabs
+    public float spawnInterval = 1f;
     public float minY = -1.4f, maxY = 7f;
     public float startX = 0f;
 
@@ -38,8 +41,17 @@ public class PlatformGeneratorManual : MonoBehaviour
             PlatformData data = activePlatforms[i];
             data.platform.transform.position += Vector3.left * data.speed * Time.deltaTime;
 
+            // Si tiene enemigo, muévelo igual
+            if (data.enemy != null)
+            {
+                data.enemy.transform.position += Vector3.left * data.speed * Time.deltaTime;
+            }
+
             if (data.platform.transform.position.x <= -53f)
             {
+                if (data.enemy != null)
+                    Destroy(data.enemy);
+
                 Destroy(data.platform);
                 activePlatforms.RemoveAt(i);
             }
@@ -58,7 +70,26 @@ public class PlatformGeneratorManual : MonoBehaviour
         float[] possibleSpeeds = { 3f, 5f, 8f };
         float selectedSpeed = possibleSpeeds[Random.Range(0, possibleSpeeds.Length)];
 
-        activePlatforms.Add(new PlatformData(newPlat, selectedSpeed));
+        // Obtener la altura de la plataforma si tiene SpriteRenderer
+        float enemyYOffset = 0.5f; // valor por defecto si no se encuentra SpriteRenderer
+        var platSR = newPlat.GetComponent<SpriteRenderer>();
+        if (platSR != null)
+        {
+            enemyYOffset = platSR.bounds.size.y / 2f + 5f; // altura plataforma + extra para que el lobo quede encima
+        }
+
+        GameObject enemy = null;
+        bool spawnEnemy = Random.value < 0.5f; // 🔥 50% probabilidad
+
+        // Instanciar enemigo si corresponde
+        if (spawnEnemy && wolfPrefab != null)
+        {
+            Vector3 enemyPos = new Vector3(spawnPos.x, spawnPos.y + enemyYOffset, -1f);
+            enemy = Instantiate(wolfPrefab, enemyPos, Quaternion.identity);
+        }
+
+        // Vincular al PlatformData
+        activePlatforms.Add(new PlatformData(newPlat, selectedSpeed, enemy));
 
         var sr = newPlat.GetComponent<SpriteRenderer>();
         if (sr != null)
