@@ -1,6 +1,19 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+[System.Serializable]
+public class TaggedRect
+{
+    public Rect rect;
+    public string tag;
+
+    public TaggedRect(Rect rect, string tag)
+    {
+        this.rect = rect;
+        this.tag = tag;
+    }
+}
+
 public class PlayerController2D : MonoBehaviour
 {
     [Header("Movimiento")]
@@ -9,7 +22,7 @@ public class PlayerController2D : MonoBehaviour
 
     [Header("Física Manual")]
     public float g = 20f;               // gravedad
-    public float c1 = 2f;                // coeficiente aerodinámico
+    public float c1 = 2f;               // coeficiente aerodinámico
     public float m = 1f;                // masa
     public Vector2 halfSize = new Vector2(0.4f, 0.5f);
 
@@ -24,16 +37,15 @@ public class PlayerController2D : MonoBehaviour
     private bool isGrounded, jumpQueued;
     private Animator animator;
     private SpriteRenderer sprite;
-    private List<Rect> groundRects = new List<Rect>();
+    private List<TaggedRect> groundRects = new List<TaggedRect>();
+    private string currentGroundTag = "";
 
     private void Awake()
     {
-        // Inicializa posición y velocidad
         x = transform.position.x;
         y = transform.position.y;
         vy = 0f;
 
-        // Obtiene componentes
         animator = GetComponent<Animator>();
         if (animatorController != null)
             animator.runtimeAnimatorController = animatorController;
@@ -45,18 +57,11 @@ public class PlayerController2D : MonoBehaviour
     {
         float dt = Time.deltaTime;
 
-        // Actualizar lista de plataformas dinámicamente
+        // Actualizar lista de plataformas
         groundRects.Clear();
-        GameObject[] floors = GameObject.FindGameObjectsWithTag("Ground");
-        foreach (var floor in floors)
-        {
-            var sr = floor.GetComponent<SpriteRenderer>();
-            if (sr != null)
-            {
-                var b = sr.bounds;
-                groundRects.Add(new Rect(b.min.x, b.min.y, b.size.x, b.size.y));
-            }
-        }
+        AddRectsFromObjects(GameObject.FindGameObjectsWithTag("Ground"), "Ground");
+        AddRectsFromObjects(GameObject.FindGameObjectsWithTag("Ice"), "Ice");
+        AddRectsFromObjects(GameObject.FindGameObjectsWithTag("Sand"), "Sand");
 
         // Lectura de input
         float moveInput = 0f;
@@ -66,33 +71,51 @@ public class PlayerController2D : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded && canMove)
             jumpQueued = true;
 
-        // --- Movimiento automático si está estático ---
+        // Movimiento automático si está quieto
         if (moveInput == 0f && isGrounded && !jumpQueued)
         {
-            // Simular que el personaje es arrastrado hacia la izquierda
-            x -= 5f * Time.deltaTime; // Puedes ajustar esta velocidad
+            x -= 5f * dt;
         }
 
-        // 1) Movimiento horizontal
-        x += moveInput * moveSpeed * dt;
+        // Modificador de fricción por tag
+        float speedMultiplier = 1f;
+        if (isGrounded)
+        {
+            if (currentGroundTag == "Ice")
+                speedMultiplier = 1.5f;
+            else if (currentGroundTag == "Sand")
+                speedMultiplier = 0.5f;
+        }
 
-        // 2) Física vertical manual
+        // 1) Movimiento horizontal con ajustes
+        float finalMoveInput = moveInput;
+
+        if (moveInput < 0f) // ir a la izquierda duplica velocidad
+            finalMoveInput *= 2f;
+
+        x += finalMoveInput * moveSpeed * speedMultiplier * dt;
+
+        // 2) Física vertical
         vy += (-g - (c1 / m) * vy) * dt;
         y += vy * dt;
 
-        // 3) Detección de suelo (AABB)
+        // 3) Detección de suelo
         isGrounded = false;
+        currentGroundTag = "";
         Vector2 pMin = new Vector2(x - halfSize.x, y - halfSize.y);
         Vector2 pMax = new Vector2(x + halfSize.x, y + halfSize.y);
+
         foreach (var plat in groundRects)
         {
-            bool overlapX = pMax.x > plat.xMin && pMin.x < plat.xMax;
-            bool overlapY = pMin.y < plat.yMax && pMin.y > plat.yMin;
+            Rect r = plat.rect;
+            bool overlapX = pMax.x > r.xMin && pMin.x < r.xMax;
+            bool overlapY = pMin.y < r.yMax && pMin.y > r.yMin;
             if (overlapX && overlapY && vy <= 0f)
             {
-                y = plat.yMax + halfSize.y;
+                y = r.yMax + halfSize.y;
                 vy = 0f;
                 isGrounded = true;
+                currentGroundTag = plat.tag;
                 break;
             }
         }
@@ -116,7 +139,7 @@ public class PlayerController2D : MonoBehaviour
             animator.SetBool("IsIdle", isIdle);
         }
 
-        // 7) Flip horizontal
+        // 7) Flip
         if (sprite != null)
         {
             if (moveInput > 0f) sprite.flipX = false;
@@ -125,7 +148,24 @@ public class PlayerController2D : MonoBehaviour
     }
 
     /// <summary>
-    /// Rebota al jugador al recibir daño desde una posición de origen.
+    /// Añade rectángulos desde objetos con SpriteRenderer.
+    /// </summary>
+    private void AddRectsFromObjects(GameObject[] objects, string tag)
+    {
+        foreach (var obj in objects)
+        {
+            var sr = obj.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                var b = sr.bounds;
+                Rect r = new Rect(b.min.x, b.min.y, b.size.x, b.size.y);
+                groundRects.Add(new TaggedRect(r, tag));
+            }
+        }
+    }
+
+    /// <summary>
+    /// Rebota al jugador desde una posición de origen.
     /// </summary>
     public void Bounce(Vector2 sourcePosition)
     {
@@ -136,6 +176,6 @@ public class PlayerController2D : MonoBehaviour
 
     public void AddGroundRect(Rect r)
     {
-        groundRects.Add(r);
+        groundRects.Add(new TaggedRect(r, "Ground"));
     }
 }
