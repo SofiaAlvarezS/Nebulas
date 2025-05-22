@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider2D))]
 public class PlayerController2D : MonoBehaviour
 {
     [Header("Movimiento Horizontal")]
@@ -15,44 +14,26 @@ public class PlayerController2D : MonoBehaviour
     public float jumpImpulse = 8f;
 
     [Header("Ground Check")]
+    public Transform groundCheck;       // Asignar en Inspector
     public float groundRadius = 0.1f;
     public LayerMask groundLayer;
 
     [Header("Animación")]
-    [Tooltip("El Animator Controller con tus clips Idle/Corrers/Jump")]
     public RuntimeAnimatorController animatorController;
 
     // Estado interno
-    private float vy;
-    private float y;
-    private float moveInput;
-    private bool jumpQueued;
-    private bool isGrounded;
+    private float vy = 0f;
+    private float y = 0f;
+    private float moveInput = 0f;
+    private bool jumpQueued = false;
+    private bool isGrounded = false;
 
     // Componentes
-    private Transform groundCheck;
     private Animator animator;
 
     void Awake()
     {
-        // Collider
-        var playerCollider = gameObject.AddComponent<BoxCollider2D>();
-        playerCollider.offset = Vector2.zero;
-        playerCollider.size = new Vector2(1f, 2f);
-
-        // Rigidbody Kinematic (si lo necesitas)
-        var rb = gameObject.AddComponent<Rigidbody2D>();
-        rb.bodyType = RigidbodyType2D.Kinematic;
-
-        // GroundCheck
-        groundCheck = new GameObject("GroundCheck").transform;
-        groundCheck.parent = transform;
-        groundCheck.localPosition = new Vector3(0f, -1f, 0f);
-        var gcCol = groundCheck.gameObject.AddComponent<CircleCollider2D>();
-        gcCol.isTrigger = true;
-        gcCol.radius = groundRadius;
-
-        // Posición inicial Y
+        // Guardamos altura inicial
         y = transform.position.y;
 
         // Animator
@@ -62,59 +43,49 @@ public class PlayerController2D : MonoBehaviour
 
     void OnEnable()
     {
-        InputService.OnMove += HandleMove;
-        InputService.OnJumpPressed += HandleJumpPressed;
+        InputService.OnMove += dir => moveInput = dir;
+        InputService.OnJumpPressed += () => { if (isGrounded) jumpQueued = true; };
     }
 
     void OnDisable()
     {
-        InputService.OnMove -= HandleMove;
-        InputService.OnJumpPressed -= HandleJumpPressed;
-    }
-
-    private void HandleMove(float dir)
-    {
-        moveInput = dir;
-    }
-
-    private void HandleJumpPressed()
-    {
-        if (isGrounded)
-            jumpQueued = true;
+        InputService.OnMove -= dir => moveInput = dir;
+        InputService.OnJumpPressed -= () => { if (isGrounded) jumpQueued = true; };
     }
 
     void Update()
     {
         float dt = Time.deltaTime;
 
-        // Chequeo suelo
+        // 1) Detección manual de suelo
         isGrounded = Physics2D.OverlapCircle(
-            groundCheck.position, groundRadius, groundLayer);
+            groundCheck.position,
+            groundRadius,
+            groundLayer
+        );
 
-        // Movimiento horizontal
+        // 2) Movimiento horizontal por transform
         transform.position += Vector3.right * (moveInput * moveSpeed * dt);
 
-        // Cola de salto
+        // 3) Salto
         if (jumpQueued)
         {
             vy = jumpImpulse;
             jumpQueued = false;
         }
 
-        // Física manual: gravedad + arrastre
+        // 4) Física manual: gravedad + arrastre
         float dv = (-g - (c1 / m) * vy) * dt;
         vy += dv;
 
-        // Actualizar Y
+        // 5) Actualizar posición vertical
         y += vy * dt;
-        var pos = transform.position;
+        Vector3 pos = transform.position;
         pos.y = y;
         transform.position = pos;
 
-        // ———> Actualizar animaciones <———
-        // Parámetro Speed (valor absoluto)
+        // 6) Animaciones
         animator.SetFloat("Speed", Mathf.Abs(moveInput));
-        // Parámetro IsGrounded
         animator.SetBool("IsGrounded", isGrounded);
     }
 }
