@@ -647,7 +647,28 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      niebla_completa_0: 6950348687624599652
+      niebla_completa_1: -3968427189332186036
+      niebla_completa_10: -1198552856805925697
+      niebla_completa_11: 7097432492712913634
+      niebla_completa_12: -2530421120822124037
+      niebla_completa_13: -4511141505539534277
+      niebla_completa_14: -4934701299165660435
+      niebla_completa_15: 4232666391061157304
+      niebla_completa_16: -5173096588756243011
+      niebla_completa_17: 5949651472546407908
+      niebla_completa_18: -7942698340634785503
+      niebla_completa_19: -3290552375054145555
+      niebla_completa_2: 9168337968908708118
+      niebla_completa_20: -6085689542666812828
+      niebla_completa_3: -6957634732937884124
+      niebla_completa_4: -6706089484040039332
+      niebla_completa_5: -3116045355015685627
+      niebla_completa_6: -36835940185479905
+      niebla_completa_7: 8875660141417754739
+      niebla_completa_8: 5931452953378470014
+      niebla_completa_9: 6221383977720714675
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
