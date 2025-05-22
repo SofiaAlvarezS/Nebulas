@@ -197,7 +197,10 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lobo muerte_0: 7816159316351304025
+      lobo muerte_1: 6507670618778152761
+      lobo muerte_2: 1069117287644964849
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
