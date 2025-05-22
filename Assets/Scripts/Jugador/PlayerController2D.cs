@@ -1,7 +1,5 @@
-
 using UnityEngine;
 using System.Collections.Generic;
-using System;
 
 public class PlayerController2D : MonoBehaviour
 {
@@ -11,7 +9,7 @@ public class PlayerController2D : MonoBehaviour
 
     [Header("Física Manual")]
     public float g = 20f;               // gravedad
-    public float c1 = 2f;               // coeficiente aerodinámico
+    public float c1 = 2f;                // coeficiente aerodinámico
     public float m = 1f;                // masa
     public Vector2 halfSize = new Vector2(0.4f, 0.5f);
 
@@ -19,30 +17,23 @@ public class PlayerController2D : MonoBehaviour
     public RuntimeAnimatorController animatorController;
 
     [Header("Rebote y Control")]
-    public bool canMove = true;
-    public float bouncePower = 5f;
-
-    [Header("Modificadores de Suelo")]
-    [Tooltip("Velocidad en plataforma de jabón")]
-    public float soapSpeedMultiplier = 1.5f;
-    [Tooltip("Velocidad en plataforma de arena")]
-    public float sandSpeed = 2f;
+    public bool canMove = true;                   // controla si el jugador responde al input
+    public float bouncePower = 5f;                // fuerza del rebote tras daño
 
     private float x, y, vy;
     private bool isGrounded, jumpQueued;
     private Animator animator;
     private SpriteRenderer sprite;
-
-    // Estructura para guardar rect y tag
-    private struct PlatformData { public Rect rect; public string tag; }
-    private List<PlatformData> platforms = new List<PlatformData>();
+    private List<Rect> groundRects = new List<Rect>();
 
     private void Awake()
     {
+        // Inicializa posición y velocidad
         x = transform.position.x;
         y = transform.position.y;
         vy = 0f;
 
+        // Obtiene componentes
         animator = GetComponent<Animator>();
         if (animatorController != null)
             animator.runtimeAnimatorController = animatorController;
@@ -54,50 +45,57 @@ public class PlayerController2D : MonoBehaviour
     {
         float dt = Time.deltaTime;
 
-        // Reconstruir lista de plataformas dinámicas
-        platforms.Clear();
-        AddPlatformsByTag("Ground");
-        AddPlatformsByTag("Jabon");
-        AddPlatformsByTag("Arena");
-
-        // Lectura de input
-        float moveInput = canMove ? Input.GetAxisRaw("Horizontal") : 0f;
-        if (Input.GetButtonDown("Jump") && isGrounded && canMove)
-            jumpQueued = true;
-
-        // 1) Física vertical manual
-        vy += (-g - (c1 / m) * vy) * dt;
-        y += vy * dt;
-
-        // 2) Detección de suelo y ajuste de velocidad
-        isGrounded = false;
-        string currentPlatformTag = "";
-        foreach (var p in platforms)
+        // Actualizar lista de plataformas dinámicamente
+        groundRects.Clear();
+        GameObject[] floors = GameObject.FindGameObjectsWithTag("Ground");
+        foreach (var floor in floors)
         {
-            Vector2 pMin = new Vector2(x - halfSize.x, y - halfSize.y);
-            Vector2 pMax = new Vector2(x + halfSize.x, y + halfSize.y);
-            bool overlapX = pMax.x > p.rect.xMin && pMin.x < p.rect.xMax;
-            bool overlapY = pMin.y < p.rect.yMax && pMin.y > p.rect.yMin;
-            if (overlapX && overlapY && vy <= 0f)
+            var sr = floor.GetComponent<SpriteRenderer>();
+            if (sr != null)
             {
-                y = p.rect.yMax + halfSize.y;
-                vy = 0f;
-                isGrounded = true;
-                currentPlatformTag = p.tag;
-                break;
+                var b = sr.bounds;
+                groundRects.Add(new Rect(b.min.x, b.min.y, b.size.x, b.size.y));
             }
         }
 
-        // 3) Movimiento horizontal con modificador según tipo de plataforma
-        float actualSpeed = moveSpeed;
-        if (isGrounded)
+        // Lectura de input
+        float moveInput = 0f;
+        if (canMove)
+            moveInput = Input.GetAxisRaw("Horizontal");  // -1, 0, +1
+
+        if (Input.GetButtonDown("Jump") && isGrounded && canMove)
+            jumpQueued = true;
+
+        // --- Movimiento automático si está estático ---
+        if (moveInput == 0f && isGrounded && !jumpQueued)
         {
-            if (currentPlatformTag == "Jabon")
-                actualSpeed *= soapSpeedMultiplier;
-            else if (currentPlatformTag == "Arena")
-                actualSpeed = sandSpeed;
+            // Simular que el personaje es arrastrado hacia la izquierda
+            x -= 5f * Time.deltaTime; // Puedes ajustar esta velocidad
         }
-        x += moveInput * actualSpeed * dt;
+
+        // 1) Movimiento horizontal
+        x += moveInput * moveSpeed * dt;
+
+        // 2) Física vertical manual
+        vy += (-g - (c1 / m) * vy) * dt;
+        y += vy * dt;
+
+        // 3) Detección de suelo (AABB)
+        isGrounded = false;
+        Vector2 pMin = new Vector2(x - halfSize.x, y - halfSize.y);
+        Vector2 pMax = new Vector2(x + halfSize.x, y + halfSize.y);
+        foreach (var plat in groundRects)
+        {
+            bool overlapX = pMax.x > plat.xMin && pMin.x < plat.xMax;
+            bool overlapY = pMin.y < plat.yMax && pMin.y > plat.yMin;
+            if (overlapX && overlapY && vy <= 0f)
+            {
+                y = plat.yMax + halfSize.y;
+                vy = 0f;
+                isGrounded = true;
+                break;
+            }
+        }
 
         // 4) Salto
         if (jumpQueued && isGrounded)
@@ -126,18 +124,6 @@ public class PlayerController2D : MonoBehaviour
         }
     }
 
-    private void AddPlatformsByTag(string tag)
-    {
-        var floors = GameObject.FindGameObjectsWithTag(tag);
-        foreach (var floor in floors)
-        {
-            var sr = floor.GetComponent<SpriteRenderer>();
-            if (sr == null) continue;
-            var b = sr.bounds;
-            platforms.Add(new PlatformData { rect = new Rect(b.min.x, b.min.y, b.size.x, b.size.y), tag = tag });
-        }
-    }
-
     /// <summary>
     /// Rebota al jugador al recibir daño desde una posición de origen.
     /// </summary>
@@ -150,6 +136,6 @@ public class PlayerController2D : MonoBehaviour
 
     public void AddGroundRect(Rect r)
     {
-        platforms.Add(new PlatformData { rect = r, tag = "Ground" });
+        groundRects.Add(r);
     }
 }
