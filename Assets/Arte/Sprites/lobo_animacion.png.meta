@@ -422,7 +422,19 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      lobo_animacion_0: 9027126228959501162
+      lobo_animacion_1: 8046302193264997612
+      lobo_animacion_10: -2012956182565561404
+      lobo_animacion_11: -704895391462647281
+      lobo_animacion_2: 1892346181499642250
+      lobo_animacion_3: 7920609445294357952
+      lobo_animacion_4: -6992458018882876982
+      lobo_animacion_5: -4967321602486245004
+      lobo_animacion_6: 989324553129160740
+      lobo_animacion_7: 4337398236871865310
+      lobo_animacion_8: 574501236698252738
+      lobo_animacion_9: 3437603258262949447
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

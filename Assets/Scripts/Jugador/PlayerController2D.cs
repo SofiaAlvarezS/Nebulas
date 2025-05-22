@@ -113,6 +113,10 @@ public class PlayerController2D : MonoBehaviour
         {
             animator.SetFloat("Speed", Mathf.Abs(moveInput));
             animator.SetBool("IsGrounded", isGrounded);
+
+            // Nuevo: Idle cuando no hay movimiento horizontal ni salto
+            bool isIdle = (moveInput == 0f) && isGrounded && !jumpQueued;
+            animator.SetBool("IsIdle", isIdle);
         }
 
         // 7) Flip horizontal
