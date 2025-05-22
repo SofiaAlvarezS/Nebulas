@@ -6,9 +6,9 @@ public class PlayerController2D : MonoBehaviour
     [Header("Movimiento Horizontal")]
     public float moveSpeed = 5f;
 
-    [Header("Física Manual")]
-    public float c1 = 32.66f;
-    public float m = 120f;
+    [Header("Fï¿½sica Manual")]
+    public float c1 = 0f;
+    public float m = 50f;
     public float g = 9.8f;
 
     [Header("Salto")]
@@ -18,7 +18,7 @@ public class PlayerController2D : MonoBehaviour
     public float groundRadius = 0.1f;
     public LayerMask groundLayer;
 
-    [Header("Animación")]
+    [Header("Animaciï¿½n")]
     [Tooltip("El Animator Controller con tus clips Idle/Corrers/Jump")]
     public RuntimeAnimatorController animatorController;
 
@@ -52,7 +52,7 @@ public class PlayerController2D : MonoBehaviour
         gcCol.isTrigger = true;
         gcCol.radius = groundRadius;
 
-        // Posición inicial Y
+        // Posiciï¿½n inicial Y
         y = transform.position.y;
 
         // Animator
@@ -101,7 +101,7 @@ public class PlayerController2D : MonoBehaviour
             jumpQueued = false;
         }
 
-        // Física manual: gravedad + arrastre
+        // Fï¿½sica manual: gravedad + arrastre
         float dv = (-g - (c1 / m) * vy) * dt;
         vy += dv;
 
@@ -111,10 +111,10 @@ public class PlayerController2D : MonoBehaviour
         pos.y = y;
         transform.position = pos;
 
-        // ———> Actualizar animaciones <———
-        // Parámetro Speed (valor absoluto)
+        // ï¿½ï¿½ï¿½> Actualizar animaciones <ï¿½ï¿½ï¿½
+        // Parï¿½metro Speed (valor absoluto)
         animator.SetFloat("Speed", Mathf.Abs(moveInput));
-        // Parámetro IsGrounded
+        // Parï¿½metro IsGrounded
         animator.SetBool("IsGrounded", isGrounded);
     }
 }
