@@ -151,16 +151,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  c1: 32.66
-  m: 120
-  g: 9.8
   jumpImpulse: 8
-  groundCheck: {fileID: 927031268}
-  groundRadius: 0.1
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  animatorController: {fileID: 0}
+  g: 9.8
+  c1: 0
+  m: 120
+  halfSize: {x: 0.4, y: 0.5}
 --- !u!212 &40516715
 SpriteRenderer:
   m_ObjectHideFlags: 0
