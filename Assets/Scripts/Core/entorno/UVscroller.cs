@@ -34,9 +34,6 @@ public class UVscroller : MonoBehaviour
             // Mover
             L.layer.position += Vector3.left * L.speed * Time.deltaTime;
 
-            // Loop: si avanzó más que su ancho, vuelve al inicio
-            if (L.startPos.x - L.layer.position.x >= L.width)
-                L.layer.position = L.startPos;
         }
     }
 }
