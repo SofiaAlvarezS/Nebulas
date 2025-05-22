@@ -66,6 +66,13 @@ public class PlayerController2D : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded && canMove)
             jumpQueued = true;
 
+        // --- Movimiento automático si está estático ---
+        if (moveInput == 0f && isGrounded && !jumpQueued)
+        {
+            // Simular que el personaje es arrastrado hacia la izquierda
+            x -= 1.5f * Time.deltaTime; // Puedes ajustar esta velocidad
+        }
+
         // 1) Movimiento horizontal
         x += moveInput * moveSpeed * dt;
 
