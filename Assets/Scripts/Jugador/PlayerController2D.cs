@@ -138,4 +138,9 @@ public class PlayerController2D : MonoBehaviour
         vy = bouncePower;
         x += dir * bouncePower * Time.deltaTime;
     }
+
+    public void AddGroundRect(Rect r)
+    {
+        groundRects.Add(r);
+    }
 }
