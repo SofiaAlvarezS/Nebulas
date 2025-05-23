@@ -5,14 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public void Play()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    }
+    [SerializeField] private string mainSceneName = "MainScene";
 
-    public void Exit()
+    private void OnMouseDown()
     {
-        Debug.Log("exit...");
-        Application.Quit();
+        // Detecta clic/tap sobre el collider 2D
+        SceneManager.LoadScene(mainSceneName);
     }
 }
