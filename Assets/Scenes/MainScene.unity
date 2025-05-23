@@ -281,7 +281,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2786908943050682830, guid: ae39050e8ec45bd4385a645cd1120355, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.52
+      value: 1.91
       objectReference: {fileID: 0}
     - target: {fileID: 2786908943050682830, guid: ae39050e8ec45bd4385a645cd1120355, type: 3}
       propertyPath: m_LocalPosition.z
@@ -321,7 +321,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4278875158733138984, guid: ae39050e8ec45bd4385a645cd1120355, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.35
+      value: 0.12
       objectReference: {fileID: 0}
     - target: {fileID: 4486983341724521799, guid: ae39050e8ec45bd4385a645cd1120355, type: 3}
       propertyPath: m_Name
@@ -859,7 +859,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2943711711674836751, guid: d33ea9f74aee1d940bfb826af9f69e2c, type: 3}
       propertyPath: m_TagString
-      value: Ground
+      value: Sand
       objectReference: {fileID: 0}
     - target: {fileID: 5377717524208458396, guid: d33ea9f74aee1d940bfb826af9f69e2c, type: 3}
       propertyPath: m_Size.x
@@ -904,6 +904,10 @@ PrefabInstance:
     - target: {fileID: 6443721855811591388, guid: d33ea9f74aee1d940bfb826af9f69e2c, type: 3}
       propertyPath: m_Name
       value: plataforma3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6443721855811591388, guid: d33ea9f74aee1d940bfb826af9f69e2c, type: 3}
+      propertyPath: m_TagString
+      value: Sand
       objectReference: {fileID: 0}
     - target: {fileID: 6513114222348298734, guid: d33ea9f74aee1d940bfb826af9f69e2c, type: 3}
       propertyPath: m_LocalScale.x
@@ -980,7 +984,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1378491799309734907, guid: c95ccfcc4fe7dd14eacceb18b273a107, type: 3}
       propertyPath: m_TagString
-      value: Ground
+      value: Ice
       objectReference: {fileID: 0}
     - target: {fileID: 3450294369060995872, guid: c95ccfcc4fe7dd14eacceb18b273a107, type: 3}
       propertyPath: m_Name
@@ -989,6 +993,10 @@ PrefabInstance:
     - target: {fileID: 3450294369060995872, guid: c95ccfcc4fe7dd14eacceb18b273a107, type: 3}
       propertyPath: m_Layer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3450294369060995872, guid: c95ccfcc4fe7dd14eacceb18b273a107, type: 3}
+      propertyPath: m_TagString
+      value: Ice
       objectReference: {fileID: 0}
     - target: {fileID: 4170601813665623698, guid: c95ccfcc4fe7dd14eacceb18b273a107, type: 3}
       propertyPath: m_LocalScale.x
