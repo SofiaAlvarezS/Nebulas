@@ -28,7 +28,7 @@ public class PlatformGeneratorManual : MonoBehaviour
     private float groundWolfTimer = 0f;
     private float groundWolfInterval = 1f; // cada 1 segundo
     private float groundWolfY = -2.97f;
-    [Range(0f, 1f)] public float groundWolfSpawnChance = 0.2f; 
+    [Range(0f, 1f)] public float groundWolfSpawnChance = 0.2f;
     private List<GameObject> groundWolves = new List<GameObject>();
 
     private float timer;
