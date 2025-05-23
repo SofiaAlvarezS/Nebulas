@@ -40,6 +40,8 @@ public class PlayerController2D : MonoBehaviour
     private List<TaggedRect> groundRects = new List<TaggedRect>();
     private string currentGroundTag = "";
 
+    private float residualHorizontalSpeed = 0f;  // velocidad horizontal acumulada para deslizamiento
+
     private void Awake()
     {
         x = transform.position.x;
@@ -71,12 +73,6 @@ public class PlayerController2D : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded && canMove)
             jumpQueued = true;
 
-        // Movimiento automático si está quieto
-        if (moveInput == 0f && isGrounded && !jumpQueued)
-        {
-            x -= 5f * dt;
-        }
-
         // Modificador de fricción por tag
         float speedMultiplier = 1f;
         if (isGrounded)
@@ -84,22 +80,57 @@ public class PlayerController2D : MonoBehaviour
             if (currentGroundTag == "Ice")
                 speedMultiplier = 1.5f;
             else if (currentGroundTag == "Sand")
-                speedMultiplier = 0.5f;
+                speedMultiplier = 0.4f;
         }
 
-        // 1) Movimiento horizontal con ajustes
-        float finalMoveInput = moveInput;
+        // Control de velocidad horizontal con deslizamiento y desplazamiento automático
+        if (moveInput != 0f)
+        {
+            // Si hay input, velocidad residual se actualiza con input (izquierda duplica velocidad)
+            float inputSpeed = moveInput;
+            if (moveInput < 0f)
+                inputSpeed *= 2f;
 
-        if (moveInput < 0f) // ir a la izquierda duplica velocidad
-            finalMoveInput *= 2f;
+            residualHorizontalSpeed = inputSpeed * moveSpeed * speedMultiplier;
+        }
+        else
+        {
+            if (isGrounded)
+            {
+                float friction = 0f;
+                float targetSpeed = -5f;
 
-        x += finalMoveInput * moveSpeed * speedMultiplier * dt;
+                if (currentGroundTag == "Ice")
+                {
+                    friction = 1.5f;  // bajo para deslizamiento suave
+                }
+                else if (currentGroundTag == "Sand")
+                {
+                    friction = 40f;   // fricción alta en arena
+                }
+                else // Ground normal
+                {
+                    friction = 20f;   // fricción media en suelo normal
+                }
 
-        // 2) Física vertical
+                residualHorizontalSpeed = Mathf.MoveTowards(residualHorizontalSpeed, targetSpeed, friction * dt);
+            }
+            else
+            {
+                // En aire reduce rápido velocidad residual para evitar deslizamiento
+                float friction = 25f;
+                residualHorizontalSpeed = Mathf.MoveTowards(residualHorizontalSpeed, 0f, friction * dt);
+            }
+        }
+
+        // Aplicar movimiento horizontal
+        x += residualHorizontalSpeed * dt;
+
+        // Física vertical
         vy += (-g - (c1 / m) * vy) * dt;
         y += vy * dt;
 
-        // 3) Detección de suelo
+        // Detección de suelo
         isGrounded = false;
         currentGroundTag = "";
         Vector2 pMin = new Vector2(x - halfSize.x, y - halfSize.y);
@@ -120,26 +151,26 @@ public class PlayerController2D : MonoBehaviour
             }
         }
 
-        // 4) Salto
+        // Salto
         if (jumpQueued && isGrounded)
         {
             vy = jumpImpulse;
             jumpQueued = false;
         }
 
-        // 5) Aplicar posición
+        // Aplicar posición
         transform.position = new Vector3(x, y, transform.position.z);
 
-        // 6) Animaciones
+        // Animaciones
         if (animator != null)
         {
-            animator.SetFloat("Speed", Mathf.Abs(moveInput));
+            animator.SetFloat("Speed", Mathf.Abs(residualHorizontalSpeed));
             animator.SetBool("IsGrounded", isGrounded);
             bool isIdle = (moveInput == 0f) && isGrounded && !jumpQueued;
             animator.SetBool("IsIdle", isIdle);
         }
 
-        // 7) Flip
+        // Flip sprite
         if (sprite != null)
         {
             if (moveInput > 0f) sprite.flipX = false;
