@@ -21,8 +21,8 @@ public class PlayerController2D : MonoBehaviour
     public float jumpImpulse = 8f;
 
     [Header("Física Manual")]
-    public float g = 20f;               // gravedad
-    public float c1 = 2f;               // coeficiente aerodinámico
+    public float g = 9.8f;               // gravedad
+    public float c1 = 0f;               // coeficiente aerodinámico
     public float m = 1f;                // masa
     public Vector2 halfSize = new Vector2(0.4f, 0.5f);
 
@@ -41,6 +41,7 @@ public class PlayerController2D : MonoBehaviour
     private string currentGroundTag = "";
 
     private float residualHorizontalSpeed = 0f;  // velocidad horizontal acumulada para deslizamiento
+    private float disableMoveTimer = 0f;  // tiempo restante sin poder mover
 
     private void Awake()
     {
@@ -58,6 +59,16 @@ public class PlayerController2D : MonoBehaviour
     private void Update()
     {
         float dt = Time.deltaTime;
+
+        if (disableMoveTimer > 0f)
+        {
+            disableMoveTimer -= dt;
+            if (disableMoveTimer <= 0f)
+            {
+                canMove = true;
+                disableMoveTimer = 0f;
+            }
+        }
 
         // Actualizar lista de plataformas
         groundRects.Clear();
@@ -158,7 +169,7 @@ public class PlayerController2D : MonoBehaviour
             jumpQueued = false;
         }
 
-        // Aplicar posición
+        // Aplicar posición final
         transform.position = new Vector3(x, y, transform.position.z);
 
         // Animaciones
@@ -195,9 +206,7 @@ public class PlayerController2D : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Rebota al jugador desde una posición de origen.
-    /// </summary>
+    // Método Bounce original que usas para rebotes de daño o choque
     public void Bounce(Vector2 sourcePosition)
     {
         float dir = (x - sourcePosition.x) >= 0f ? 1f : -1f;
@@ -208,5 +217,27 @@ public class PlayerController2D : MonoBehaviour
     public void AddGroundRect(Rect r)
     {
         groundRects.Add(new TaggedRect(r, "Ground"));
+    }
+
+    public void TriggerParabolicRebound()
+    {
+        float targetX = 0f; // centro horizontal
+        float dir = (targetX - x) >= 0f ? 1f : -1f;
+
+        vy = bouncePower * 3f;                   // salto vertical fuerte
+        residualHorizontalSpeed = dir * bouncePower * 5f; // rebote horizontal muy fuerte
+
+        canMove = false;
+        disableMoveTimer = 1f;  // 1 segundo sin movimiento
+    }
+
+    // Método para aplicar un rebote con fuerza vectorial arbitraria
+    public void ApplyRebound(Vector2 force)
+    {
+        residualHorizontalSpeed = force.x;
+        vy = force.y;
+
+        canMove = false;
+        disableMoveTimer = 1f;  // bloqueo movimiento 1 segundo
     }
 }
