@@ -1,6 +1,19 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+[System.Serializable]
+public class TaggedRect
+{
+    public Rect rect;
+    public string tag;
+
+    public TaggedRect(Rect rect, string tag)
+    {
+        this.rect = rect;
+        this.tag = tag;
+    }
+}
+
 public class PlayerController2D : MonoBehaviour
 {
     [Header("Movimiento")]
@@ -8,8 +21,8 @@ public class PlayerController2D : MonoBehaviour
     public float jumpImpulse = 8f;
 
     [Header("Física Manual")]
-    public float g = 20f;               // gravedad
-    public float c1 = 2f;                // coeficiente aerodinámico
+    public float g = 9.8f;               // gravedad
+    public float c1 = 0f;               // coeficiente aerodinámico
     public float m = 1f;                // masa
     public Vector2 halfSize = new Vector2(0.4f, 0.5f);
 
@@ -24,16 +37,18 @@ public class PlayerController2D : MonoBehaviour
     private bool isGrounded, jumpQueued;
     private Animator animator;
     private SpriteRenderer sprite;
-    private List<Rect> groundRects = new List<Rect>();
+    private List<TaggedRect> groundRects = new List<TaggedRect>();
+    private string currentGroundTag = "";
+
+    private float residualHorizontalSpeed = 0f;  // velocidad horizontal acumulada para deslizamiento
+    private float disableMoveTimer = 0f;  // tiempo restante sin poder mover
 
     private void Awake()
     {
-        // Inicializa posición y velocidad
         x = transform.position.x;
         y = transform.position.y;
         vy = 0f;
 
-        // Obtiene componentes
         animator = GetComponent<Animator>();
         if (animatorController != null)
             animator.runtimeAnimatorController = animatorController;
@@ -45,18 +60,21 @@ public class PlayerController2D : MonoBehaviour
     {
         float dt = Time.deltaTime;
 
-        // Actualizar lista de plataformas dinámicamente
-        groundRects.Clear();
-        GameObject[] floors = GameObject.FindGameObjectsWithTag("Ground");
-        foreach (var floor in floors)
+        if (disableMoveTimer > 0f)
         {
-            var sr = floor.GetComponent<SpriteRenderer>();
-            if (sr != null)
+            disableMoveTimer -= dt;
+            if (disableMoveTimer <= 0f)
             {
-                var b = sr.bounds;
-                groundRects.Add(new Rect(b.min.x, b.min.y, b.size.x, b.size.y));
+                canMove = true;
+                disableMoveTimer = 0f;
             }
         }
+
+        // Actualizar lista de plataformas
+        groundRects.Clear();
+        AddRectsFromObjects(GameObject.FindGameObjectsWithTag("Ground"), "Ground");
+        AddRectsFromObjects(GameObject.FindGameObjectsWithTag("Ice"), "Ice");
+        AddRectsFromObjects(GameObject.FindGameObjectsWithTag("Sand"), "Sand");
 
         // Lectura de input
         float moveInput = 0f;
@@ -66,57 +84,104 @@ public class PlayerController2D : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded && canMove)
             jumpQueued = true;
 
-        // --- Movimiento automático si está estático ---
-        if (moveInput == 0f && isGrounded && !jumpQueued)
+        // Modificador de fricción por tag
+        float speedMultiplier = 1f;
+        if (isGrounded)
         {
-            // Simular que el personaje es arrastrado hacia la izquierda
-            x -= 1.5f * Time.deltaTime; // Puedes ajustar esta velocidad
+            if (currentGroundTag == "Ice")
+                speedMultiplier = 1.5f;
+            else if (currentGroundTag == "Sand")
+                speedMultiplier = 0.4f;
         }
 
-        // 1) Movimiento horizontal
-        x += moveInput * moveSpeed * dt;
+        // Control de velocidad horizontal con deslizamiento y desplazamiento automático
+        if (moveInput != 0f)
+        {
+            // Si hay input, velocidad residual se actualiza con input (izquierda duplica velocidad)
+            float inputSpeed = moveInput;
+            if (moveInput < 0f)
+                inputSpeed *= 2f;
 
-        // 2) Física vertical manual
+            residualHorizontalSpeed = inputSpeed * moveSpeed * speedMultiplier;
+        }
+        else
+        {
+            if (isGrounded)
+            {
+                float friction = 0f;
+                float targetSpeed = -5f;
+
+                if (currentGroundTag == "Ice")
+                {
+                    friction = 1.5f;  // bajo para deslizamiento suave
+                }
+                else if (currentGroundTag == "Sand")
+                {
+                    friction = 40f;   // fricción alta en arena
+                }
+                else // Ground normal
+                {
+                    friction = 20f;   // fricción media en suelo normal
+                }
+
+                residualHorizontalSpeed = Mathf.MoveTowards(residualHorizontalSpeed, targetSpeed, friction * dt);
+            }
+            else
+            {
+                // En aire reduce rápido velocidad residual para evitar deslizamiento
+                float friction = 25f;
+                residualHorizontalSpeed = Mathf.MoveTowards(residualHorizontalSpeed, 0f, friction * dt);
+            }
+        }
+
+        // Aplicar movimiento horizontal
+        x += residualHorizontalSpeed * dt;
+
+        // Física vertical
         vy += (-g - (c1 / m) * vy) * dt;
         y += vy * dt;
 
-        // 3) Detección de suelo (AABB)
+        // Detección de suelo
         isGrounded = false;
+        currentGroundTag = "";
         Vector2 pMin = new Vector2(x - halfSize.x, y - halfSize.y);
         Vector2 pMax = new Vector2(x + halfSize.x, y + halfSize.y);
+
         foreach (var plat in groundRects)
         {
-            bool overlapX = pMax.x > plat.xMin && pMin.x < plat.xMax;
-            bool overlapY = pMin.y < plat.yMax && pMin.y > plat.yMin;
+            Rect r = plat.rect;
+            bool overlapX = pMax.x > r.xMin && pMin.x < r.xMax;
+            bool overlapY = pMin.y < r.yMax && pMin.y > r.yMin;
             if (overlapX && overlapY && vy <= 0f)
             {
-                y = plat.yMax + halfSize.y;
+                y = r.yMax + halfSize.y;
                 vy = 0f;
                 isGrounded = true;
+                currentGroundTag = plat.tag;
                 break;
             }
         }
 
-        // 4) Salto
+        // Salto
         if (jumpQueued && isGrounded)
         {
             vy = jumpImpulse;
             jumpQueued = false;
         }
 
-        // 5) Aplicar posición
+        // Aplicar posición final
         transform.position = new Vector3(x, y, transform.position.z);
 
-        // 6) Animaciones
+        // Animaciones
         if (animator != null)
         {
-            animator.SetFloat("Speed", Mathf.Abs(moveInput));
+            animator.SetFloat("Speed", Mathf.Abs(residualHorizontalSpeed));
             animator.SetBool("IsGrounded", isGrounded);
             bool isIdle = (moveInput == 0f) && isGrounded && !jumpQueued;
             animator.SetBool("IsIdle", isIdle);
         }
 
-        // 7) Flip horizontal
+        // Flip sprite
         if (sprite != null)
         {
             if (moveInput > 0f) sprite.flipX = false;
@@ -125,8 +190,23 @@ public class PlayerController2D : MonoBehaviour
     }
 
     /// <summary>
-    /// Rebota al jugador al recibir daño desde una posición de origen.
+    /// Añade rectángulos desde objetos con SpriteRenderer.
     /// </summary>
+    private void AddRectsFromObjects(GameObject[] objects, string tag)
+    {
+        foreach (var obj in objects)
+        {
+            var sr = obj.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                var b = sr.bounds;
+                Rect r = new Rect(b.min.x, b.min.y, b.size.x, b.size.y);
+                groundRects.Add(new TaggedRect(r, tag));
+            }
+        }
+    }
+
+    // Método Bounce original que usas para rebotes de daño o choque
     public void Bounce(Vector2 sourcePosition)
     {
         float dir = (x - sourcePosition.x) >= 0f ? 1f : -1f;
@@ -136,6 +216,28 @@ public class PlayerController2D : MonoBehaviour
 
     public void AddGroundRect(Rect r)
     {
-        groundRects.Add(r);
+        groundRects.Add(new TaggedRect(r, "Ground"));
+    }
+
+    public void TriggerParabolicRebound()
+    {
+        float targetX = 0f; // centro horizontal
+        float dir = (targetX - x) >= 0f ? 1f : -1f;
+
+        vy = bouncePower * 3f;                   // salto vertical fuerte
+        residualHorizontalSpeed = dir * bouncePower * 5f; // rebote horizontal muy fuerte
+
+        canMove = false;
+        disableMoveTimer = 1f;  // 1 segundo sin movimiento
+    }
+
+    // Método para aplicar un rebote con fuerza vectorial arbitraria
+    public void ApplyRebound(Vector2 force)
+    {
+        residualHorizontalSpeed = force.x;
+        vy = force.y;
+
+        canMove = false;
+        disableMoveTimer = 1f;  // bloqueo movimiento 1 segundo
     }
 }
