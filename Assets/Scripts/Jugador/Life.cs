@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class Life : MonoBehaviour
 {
-    [Header("Configuración de Vida")]
+    [Header("ConfiguraciÃ³n de Vida")]
     [SerializeField] private float maxHealth = 3f;
     [SerializeField] private float timeLostControl = 0.5f;
     [SerializeField] private float bouncePower = 5f;
+
+    [Header("UI de Vida")]
+    [SerializeField] private Corazones corazones;
 
     public event EventHandler playerDeath;
 
@@ -18,6 +21,7 @@ public class Life : MonoBehaviour
     private void Awake()
     {
         currentHealth = maxHealth;
+
         playerController = GetComponent<PlayerController2D>();
         if (playerController == null)
             Debug.LogError("Life: falta PlayerController2D en el mismo GameObject.");
@@ -25,30 +29,31 @@ public class Life : MonoBehaviour
         animator = GetComponent<Animator>();
         if (animator == null)
             Debug.LogError("Life: falta Animator en el mismo GameObject.");
+
+        if (corazones != null)
+            corazones.UpdateHearts(currentHealth);
     }
 
     /// <summary>
-    /// Llama cuando el jugador recibe daño.
+    /// Llama cuando el jugador recibe daÃ±o.
     /// </summary>
     /// <param name="damage">Cantidad de vida a restar.</param>
-    /// <param name="sourcePosition">Posición del origen del golpe (para rebotar).</param>
+    /// <param name="sourcePosition">PosiciÃ³n del origen del golpe (para rebotar).</param>
     public void TakeDamage(float damage, Vector2 sourcePosition)
     {
         currentHealth -= damage;
 
-        // Disparamos la animación de golpe
         animator.SetTrigger("Hit");
 
-        // Rebote inmediato
         if (playerController != null)
             playerController.Bounce(sourcePosition);
 
-
-        // Pausar el control de movimiento
         if (playerController != null)
             StartCoroutine(LostControl());
 
-        // Muerte
+        if (corazones != null)
+            corazones.UpdateHearts(currentHealth);
+
         if (currentHealth <= 0f)
         {
             playerDeath?.Invoke(this, EventArgs.Empty);
