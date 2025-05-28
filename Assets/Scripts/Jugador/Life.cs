@@ -8,11 +8,14 @@ public class Life : MonoBehaviour
     [SerializeField] private float maxHealth = 3f;
     [SerializeField] private float timeLostControl = 0.5f;
     [SerializeField] private float bouncePower = 5f;
-    [SerializeField] private float damageFlashDuration = 0.5f;  // Duración total del parpadeo
-    [SerializeField] private float flashInterval = 0.1f;        // Tiempo entre cambios de color
+    [SerializeField] private float damageFlashDuration = 0.5f;
+    [SerializeField] private float flashInterval = 0.1f;
 
     [Header("UI de Vida")]
     [SerializeField] private Corazones corazones;
+
+    [Header("Game Over")]
+    [SerializeField] private GameOverManager gameOverManager;
 
     private SpriteRenderer spriteRenderer;
     public event EventHandler playerDeath;
@@ -21,21 +24,16 @@ public class Life : MonoBehaviour
     private PlayerController2D playerController;
     private Animator animator;
 
+    private bool isInvulnerable = false;
+    [SerializeField] private float invulnerabilityDuration = 1.0f;
+
     private void Awake()
     {
         currentHealth = maxHealth;
 
         playerController = GetComponent<PlayerController2D>();
-        if (playerController == null)
-            Debug.LogError("Life: falta PlayerController2D en el mismo GameObject.");
-
         animator = GetComponent<Animator>();
-        if (animator == null)
-            Debug.LogError("Life: falta Animator en el mismo GameObject.");
-
         spriteRenderer = GetComponent<SpriteRenderer>();
-        if (spriteRenderer == null)
-            Debug.LogError("Life: falta SpriteRenderer en el mismo GameObject.");
 
         if (corazones != null)
             corazones.UpdateHearts(currentHealth);
@@ -43,9 +41,13 @@ public class Life : MonoBehaviour
 
     public void TakeDamage(float damage, Vector2 sourcePosition)
     {
+        if (isInvulnerable)
+            return;
+
         currentHealth -= damage;
 
-        animator.SetTrigger("Hit");
+        if (animator != null)
+            animator.SetTrigger("Hit");
 
         if (playerController != null)
             playerController.Bounce(sourcePosition);
@@ -59,9 +61,14 @@ public class Life : MonoBehaviour
         if (spriteRenderer != null)
             StartCoroutine(DamageFlash());
 
+        StartCoroutine(InvulnerabilityTimer());
+
         if (currentHealth <= 0f)
         {
             playerDeath?.Invoke(this, EventArgs.Empty);
+            if (gameOverManager != null)
+                gameOverManager.ShowGameOver();
+
             Destroy(gameObject);
         }
     }
@@ -83,18 +90,22 @@ public class Life : MonoBehaviour
 
         while (elapsed < damageFlashDuration)
         {
-            // Cambiar a rojo
             spriteRenderer.color = Color.red;
             yield return new WaitForSeconds(flashInterval);
 
-            // Volver al color original
             spriteRenderer.color = originalColor;
             yield return new WaitForSeconds(flashInterval);
 
             elapsed += flashInterval * 2;
         }
 
-        // Asegurarse que quede el color original
         spriteRenderer.color = originalColor;
+    }
+
+    private IEnumerator InvulnerabilityTimer()
+    {
+        isInvulnerable = true;
+        yield return new WaitForSeconds(invulnerabilityDuration);
+        isInvulnerable = false;
     }
 }
