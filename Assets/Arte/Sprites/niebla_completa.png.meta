@@ -1,0 +1,676 @@
+fileFormatVersion: 2
+guid: e41afa565dc7efd49923a7260521839b
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 6950348687624599652
+    second: niebla_completa_0
+  - first:
+      213: -3968427189332186036
+    second: niebla_completa_1
+  - first:
+      213: 9168337968908708118
+    second: niebla_completa_2
+  - first:
+      213: -6957634732937884124
+    second: niebla_completa_3
+  - first:
+      213: -6706089484040039332
+    second: niebla_completa_4
+  - first:
+      213: -3116045355015685627
+    second: niebla_completa_5
+  - first:
+      213: -36835940185479905
+    second: niebla_completa_6
+  - first:
+      213: 8875660141417754739
+    second: niebla_completa_7
+  - first:
+      213: 5931452953378470014
+    second: niebla_completa_8
+  - first:
+      213: 6221383977720714675
+    second: niebla_completa_9
+  - first:
+      213: -1198552856805925697
+    second: niebla_completa_10
+  - first:
+      213: 7097432492712913634
+    second: niebla_completa_11
+  - first:
+      213: -2530421120822124037
+    second: niebla_completa_12
+  - first:
+      213: -4511141505539534277
+    second: niebla_completa_13
+  - first:
+      213: -4934701299165660435
+    second: niebla_completa_14
+  - first:
+      213: 4232666391061157304
+    second: niebla_completa_15
+  - first:
+      213: -5173096588756243011
+    second: niebla_completa_16
+  - first:
+      213: 5949651472546407908
+    second: niebla_completa_17
+  - first:
+      213: -7942698340634785503
+    second: niebla_completa_18
+  - first:
+      213: -3290552375054145555
+    second: niebla_completa_19
+  - first:
+      213: -6085689542666812828
+    second: niebla_completa_20
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: niebla_completa_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 799
+        width: 142
+        height: 129
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 46877fe8e49947060800000000000000
+      internalID: 6950348687624599652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: niebla_completa_1
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 799
+        width: 153
+        height: 129
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4c6ad63f705de8c0800000000000000
+      internalID: -3968427189332186036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: niebla_completa_2
+      rect:
+        serializedVersion: 2
+        x: 775
+        y: 799
+        width: 151
+        height: 129
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 619a7898eca7c3f70800000000000000
+      internalID: 9168337968908708118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: niebla_completa_3
+      rect:
+        serializedVersion: 2
+        x: 1163
+        y: 799
+        width: 146
+        height: 129
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42e4152d214817f90800000000000000
+      internalID: -6957634732937884124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: niebla_completa_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 639
+        width: 135
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c549fc7052f2fe2a0800000000000000
+      internalID: -6706089484040039332
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: niebla_completa_5
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 639
+        width: 149
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50ab846524591c4d0800000000000000
+      internalID: -3116045355015685627
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: niebla_completa_6
+      rect:
+        serializedVersion: 2
+        x: 775
+        y: 639
+        width: 153
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f15e64658e12d7ff0800000000000000
+      internalID: -36835940185479905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: niebla_completa_7
+      rect:
+        serializedVersion: 2
+        x: 1163
+        y: 639
+        width: 165
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3707c449fddac2b70800000000000000
+      internalID: 8875660141417754739
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: niebla_completa_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 479
+        width: 181
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e78b010f801c05250800000000000000
+      internalID: 5931452953378470014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: niebla_completa_9
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 479
+        width: 197
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b59953f3cbc65650800000000000000
+      internalID: 6221383977720714675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: niebla_completa_10
+      rect:
+        serializedVersion: 2
+        x: 775
+        y: 479
+        width: 232
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fbc9d85e682ed5fe0800000000000000
+      internalID: -1198552856805925697
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: niebla_completa_11
+      rect:
+        serializedVersion: 2
+        x: 1163
+        y: 479
+        width: 253
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2eae7719f352f7260800000000000000
+      internalID: 7097432492712913634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: niebla_completa_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 319
+        width: 297
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf16049b56322ecd0800000000000000
+      internalID: -2530421120822124037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: niebla_completa_13
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 319
+        width: 323
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b329bc6a3b43561c0800000000000000
+      internalID: -4511141505539534277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: niebla_completa_14
+      rect:
+        serializedVersion: 2
+        x: 775
+        y: 319
+        width: 358
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dea7296405b648bb0800000000000000
+      internalID: -4934701299165660435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: niebla_completa_15
+      rect:
+        serializedVersion: 2
+        x: 1163
+        y: 319
+        width: 357
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b55fe338a37dba30800000000000000
+      internalID: 4232666391061157304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: niebla_completa_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 159
+        width: 357
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dbd266e8f087538b0800000000000000
+      internalID: -5173096588756243011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: niebla_completa_17
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 159
+        width: 358
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e5228edd78619250800000000000000
+      internalID: 5949651472546407908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: niebla_completa_18
+      rect:
+        serializedVersion: 2
+        x: 775
+        y: 159
+        width: 358
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 129016001fdd5c190800000000000000
+      internalID: -7942698340634785503
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: niebla_completa_19
+      rect:
+        serializedVersion: 2
+        x: 1163
+        y: 159
+        width: 357
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de7641a8c0c9552d0800000000000000
+      internalID: -3290552375054145555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: niebla_completa_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 357
+        height: 129
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4620904ba994b8ba0800000000000000
+      internalID: -6085689542666812828
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      niebla_completa_0: 6950348687624599652
+      niebla_completa_1: -3968427189332186036
+      niebla_completa_10: -1198552856805925697
+      niebla_completa_11: 7097432492712913634
+      niebla_completa_12: -2530421120822124037
+      niebla_completa_13: -4511141505539534277
+      niebla_completa_14: -4934701299165660435
+      niebla_completa_15: 4232666391061157304
+      niebla_completa_16: -5173096588756243011
+      niebla_completa_17: 5949651472546407908
+      niebla_completa_18: -7942698340634785503
+      niebla_completa_19: -3290552375054145555
+      niebla_completa_2: 9168337968908708118
+      niebla_completa_20: -6085689542666812828
+      niebla_completa_3: -6957634732937884124
+      niebla_completa_4: -6706089484040039332
+      niebla_completa_5: -3116045355015685627
+      niebla_completa_6: -36835940185479905
+      niebla_completa_7: 8875660141417754739
+      niebla_completa_8: 5931452953378470014
+      niebla_completa_9: 6221383977720714675
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
