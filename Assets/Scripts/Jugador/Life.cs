@@ -7,7 +7,6 @@ public class Life : MonoBehaviour
     [Header("Configuración de Vida")]
     [SerializeField] private float maxHealth = 3f;
     [SerializeField] private float timeLostControl = 0.5f;
-    [SerializeField] private float bouncePower = 5f;
     [SerializeField] private float damageFlashDuration = 0.5f;
     [SerializeField] private float flashInterval = 0.1f;
 

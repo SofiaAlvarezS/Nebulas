@@ -6,7 +6,7 @@ public class ResumeButton : MonoBehaviour
 
     void Start()
     {
-        pauseCtrl = FindObjectOfType<PauseController>();
+        pauseCtrl = Object.FindFirstObjectByType<PauseController>();
     }
 
     void OnMouseDown()

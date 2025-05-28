@@ -6,7 +6,7 @@ public class MainMenuButton : MonoBehaviour
 
     void Start()
     {
-        pauseCtrl = FindObjectOfType<PauseController>();
+        pauseCtrl = Object.FindFirstObjectByType<PauseController>();
     }
 
     void OnMouseDown()
